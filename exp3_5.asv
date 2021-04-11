@@ -1,0 +1,33 @@
+a = [1 2 5 6 7];
+b = [2 5 6];
+s1 = Icorr(a,b)
+s2 = xcorr(a,b)
+function [s] = Icorr(s1,s2)
+% Clculate Correlation between functions
+s1_s = size(s1);
+s2_s = size(s2);
+if s1_s(1) ~= 1
+    s1 = s1';
+end
+
+if s2_s(1) ~= 1
+    s2 = s2';
+end
+
+s1_len = length(s1);
+s2_len = length(s2);
+s_len = max([s1_len,s2_len]);
+dlen = abs(s1_len-s2_len);
+if s_len == s1_len;
+    s2 = [s2,zeros(1,dlen)];
+else 
+    s1 = [s1,zeros(1,dlen)];
+end
+
+y = zeros(s_len,s_len*2-1);
+for i = 1:s_len
+    y(i,s_len+i-1:-1:i) = s1;
+end
+end
+s = s2*y;
+s = s(1:s_len*2-1-dlen);
